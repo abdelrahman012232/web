@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Admin - Users page</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/main.css" />
+    <style>
+      .sidebar {
+        min-height: 100vh;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+      }
+      .nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+      }
+      .card {
+        border: none;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15);
+      }
+      .border-left-primary {
+        border-left: 0.25rem solid #4e73df !important;
+      }
+      .border-left-success {
+        border-left: 0.25rem solid #1cc88a !important;
+      }
+      .active-page {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <%- include('./partials/admin-sidebar') %>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+          <div class="page-content">
+            <div
+              class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+            >
+              <h1 class="h2">User Management</h1>
+              <div class="btn-toolbar mb-2 mb-md-0">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#addUserModal"
+                >
+                  <i class="bi bi-plus"></i> Add New User
+                </button>
+              </div>
+            </div>
+
+            <div class="card shadow mb-4">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table
+                    class="table table-bordered"
+                    id="usersTable"
+                    width="100%"
+                    cellspacing="0"
+                  >
+                    <thead>
+                      <tr>
+                        <th>No.</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                      <% users.forEach((user, index) => { %>
+                      <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= user.name %></td>
+                        <td><%= user.email %></td>
+                        <td>
+                          <span
+                            class="badge <%= user.role === 'admin' ? 'bg-success' : 'bg-primary' %>"
+                          >
+                            <%= user.role %>
+                          </span>
+                        </td>
+                        <td>
+                          <button
+                            class="btn btn-sm btn-outline-primary me-1 edit-user"
+                            data-userId="<%= user._id %>"
+                          >
+                            <i class="fas fa-edit"></i>
+                          </button>
+                          <button
+                            class="btn btn-sm btn-outline-danger delete-user"
+                            data-userId="<%= user._id %>"
+                          >
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="addUserModal"
+      tabindex="-1"
+      aria-labelledby="addUserModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="addUserForm">
+              <div class="mb-3">
+                <label for="userName" class="form-label">Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="userName"
+                  name="name"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="userEmail" class="form-label">Email</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="userEmail"
+                  name="email"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="userPassword" class="form-label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="userPassword"
+                  name="password"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="userRole" class="form-label">Role</label>
+                <select class="form-select" id="userRole" name="role">
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              form="addUserForm"
+              class="btn btn-primary"
+              id="modalSubmitBtn"
+            >
+              Add User
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const modal = document.getElementById("addUserModal");
+        const form = document.getElementById("addUserForm");
+        const submitBtn = document.getElementById("modalSubmitBtn");
+
+        // ===== DELETE USER =====
+        document.querySelectorAll(".delete-user").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            const userId = btn.getAttribute("data-userId");
+            if (!confirm("Are you sure you want to delete this user?")) return;
+
+            try {
+              const res = await fetch(`/api/user/${userId}`, {
+                method: "DELETE",
+              });
+              if (!res.ok) {
+                const err = await res.json();
+                alert("Error: " + (err.message || "Failed to delete user."));
+                return;
+              }
+              alert("User deleted successfully!");
+              btn.closest("tr").remove();
+            } catch (err) {
+              console.error("Delete Error:", err);
+              alert("An unexpected error occurred.");
+            }
+          });
+        });
+
+        // ===== OPEN EDIT MODAL =====
+        document.querySelectorAll(".edit-user").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            const userId = btn.getAttribute("data-userId");
+
+            try {
+              const res = await fetch(`/api/user/${userId}`);
+              if (!res.ok) {
+                alert("Failed to load user data.");
+                return;
+              }
+
+              const user = await res.json();
+
+              // Fill form
+              document.getElementById("userName").value = user.name;
+              document.getElementById("userEmail").value = user.email;
+              document.getElementById("userPassword").value = "";
+              document.getElementById("userRole").value = user.role;
+
+              // Set mode
+              modal.setAttribute("data-mode", "edit");
+              modal.setAttribute("data-userid", user._id);
+
+              document.getElementById("addUserModalLabel").textContent =
+                "Edit User";
+              submitBtn.textContent = "Save Changes";
+
+              const modalInstance = new bootstrap.Modal(modal);
+              modalInstance.show();
+            } catch (err) {
+              console.error("Edit Load Error:", err);
+              alert("An unexpected error occurred.");
+            }
+          });
+        });
+
+        // ===== RESET MODAL FOR ADD =====
+        modal.addEventListener("show.bs.modal", () => {
+          const mode = modal.getAttribute("data-mode");
+          if (mode !== "edit") {
+            form.reset();
+            modal.setAttribute("data-mode", "add");
+            modal.removeAttribute("data-userid");
+            document.getElementById("addUserModalLabel").textContent =
+              "Add New User";
+            submitBtn.textContent = "Add User";
+          }
+        });
+
+        // ===== FORM VALIDATION =====
+        function validateFormFields({ name, email, password, role }, mode) {
+          if (!name || !email || !role) {
+            alert("Please fill in all required fields.");
+            return false;
+          }
+
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            alert("Please enter a valid email address.");
+            return false;
+          }
+
+          if (mode === "add" && password.length < 6) {
+            alert("Password must be at least 6 characters long.");
+            return false;
+          }
+
+          if (mode === "edit" && password && password.length < 6) {
+            alert(
+              "If changing the password, it must be at least 6 characters."
+            );
+            return false;
+          }
+
+          return true;
+        }
+
+        // ===== HANDLE SUBMIT =====
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const name = document.getElementById("userName").value.trim();
+          const email = document.getElementById("userEmail").value.trim();
+          const password = document.getElementById("userPassword").value.trim();
+          const role = document.getElementById("userRole").value;
+
+          const mode = modal.getAttribute("data-mode") || "add";
+          const userId = modal.getAttribute("data-userid");
+
+          // Client-side validation
+          if (!validateFormFields({ name, email, password, role }, mode)) {
+            return;
+          }
+
+          const url =
+            mode === "edit" ? `/api/user/${userId}` : "/api/user/signup";
+          const method = mode === "edit" ? "PUT" : "POST";
+
+          const payload =
+            mode === "edit"
+              ? { name, email, role, ...(password && { password }) }
+              : { name, email, password, role };
+
+          try {
+            const res = await fetch(url, {
+              method,
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+
+            if (!res.ok) {
+              const err = await res.json();
+              alert("Error: " + (err.message || "Request failed."));
+              return;
+            }
+
+            alert(
+              mode === "edit"
+                ? "User updated successfully!"
+                : "User added successfully!"
+            );
+            const modalInstance = bootstrap.Modal.getInstance(modal);
+            modalInstance.hide();
+            window.location.reload();
+          } catch (err) {
+            console.error("Submit Error:", err);
+            alert("An unexpected error occurred.");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
