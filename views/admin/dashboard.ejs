@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% /* meta + css same as original */ %>
+    <title>Admin - PAGE_NAME</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/main.css" />
+
+    <style>
+      .sidebar {
+        min-height: 100vh;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+      }
+      .nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+      }
+      .card {
+        border: none;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15);
+      }
+      .border-left-primary {
+        border-left: 0.25rem solid #4e73df !important;
+      }
+      .border-left-success {
+        border-left: 0.25rem solid #1cc88a !important;
+      }
+      .active-page {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <%- include('./partials/admin-sidebar') %>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+          <h1 class="h2 mb-4">Dashboard</h1>
+          <div class="row">
+            <div class="col-md-3 mb-4">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                      <div
+                        class="text-xs fw-bold text-primary text-uppercase mb-1"
+                      >
+                        Total Users
+                      </div>
+                      <div
+                        class="h5 mb-0 fw-bold text-gray-800"
+                        id="totalUsers"
+                      >
+                        0
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="bi bi-people fs-2 text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3 mb-4">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                      <div
+                        class="text-xs fw-bold text-success text-uppercase mb-1"
+                      >
+                        Total Products
+                      </div>
+                      <div
+                        class="h5 mb-0 fw-bold text-gray-800"
+                        id="totalProducts"
+                      >
+                        0
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="bi bi-box-seam fs-2 text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
